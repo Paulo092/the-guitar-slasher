@@ -25,15 +25,21 @@ class NeuralNetwork():
     def __init__(self, layersSize, learningRate=0.1, beta=1.0):
         self.learningRate = learningRate
         self.beta = beta
+        self.nbInputs = None
+        self.nbOutputs = None
+        self.layersSize = None
+        self.nbLayers = None
+        self.layers = None
+        if (len(layersSize) == 0):
+            return
 
         self.nbInputs = layersSize[0]
         self.nbOutputs = layersSize[-1]
         self.layersSize = layersSize[1:]
         self.nbLayers = len(self.layersSize)
-        self.layers = None
-        self.initializeNeuralNetwork()
+        self.initializeNeuralNetwork(initializeRandom=True)
     
-    def initializeNeuralNetwork(self):
+    def initializeNeuralNetwork(self, initializeRandom=False):
         self.layers = []
         for i in range(self.nbLayers):
             nbInputs = (self.layersSize[i-1] if (i) else self.nbInputs) + 1 #to BIAS
@@ -97,14 +103,28 @@ class NeuralNetwork():
                         file.write("{}".format(self.layers[layerIdx].weights.matrix[i][j]))
                     file.write("\n")
 
+    def loadStateOnAFile(self, filePathName):
+        with open(filePathName, "r") as file:
+            def getFileLine(useFloat=False):
+                return [float(value) if (useFloat) else int(value) for value in file.readline().split()]
+
+            self.learningRate, self.beta = getFileLine(True)
+            self.nbInputs, self.nbOutputs = getFileLine()
+            self.nbLayers, = getFileLine()
+            self.layersSize = getFileLine()
+            self.initializeNeuralNetwork()
+            for layerIdx in range(self.nbLayers):
+                nbInputs, nbNodes, _ = getFileLine()
+                for i in range(nbNodes):
+                    values = getFileLine(useFloat=True)
+                    for j in range(nbInputs):
+                        self.layers[layerIdx].weights.matrix[i][j] = values[j]
+
 
 if (__name__ == '__main__'):
-    nn = NeuralNetwork([2, 3, 2, 1])
+    nn = NeuralNetwork([])
+    nn.loadStateOnAFile("./RNN-MLP/test.txt")
     print(nn.nbLayers)
-    nn.insertInputs([1, 1])
-
-    nn.forward()
-    for i in range(0, nn.nbLayers):
-        print(nn.layers[i].outputY)
-
-    nn.saveStateOnAFile("./RNN-MLP/test.txt")
+    print(nn.layersSize)
+    for i in range(nn.nbLayers):
+        print(nn.layers[i].weights)

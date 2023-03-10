@@ -26,12 +26,12 @@
 
 ### 🧠 IA
 - [ ] Desenvolver RNN (MLP);
-    - [ x ] Desenvolver TAD Matriz com operações básicas;
-    - [ x ] Construir arquitetura da RNN (MLP);
-    - [ x ] Implementar Forward;
+    - [x] Desenvolver TAD Matriz com operações básicas;
+    - [x] Construir arquitetura da RNN (MLP);
+    - [x] Implementar Forward;
     - [ ] Implementar Back-Propagation;
-    - [ ] Salvar estado da RNN (MLP) em um arquivo;
-    - [ ] Carregar estado da RNN (MLP) a partir de um arquivo.
+    - [x] Salvar estado da RNN (MLP) em um arquivo;
+    - [x] Carregar estado da RNN (MLP) a partir de um arquivo.
 - [ ] Integrar com algorítmo genético;
 - [ ] Integrar com aprendizado supervisionado;
 - [ ] Integrar com aprendizado por reforço;
