@@ -22,7 +22,8 @@ class LayerNeuralNetwork():
 #MultiLayerPerceptron implementation
 #BIAS will be always the last one
 class NeuralNetwork():
-    def __init__(self, layersSize, beta=1.0):
+    def __init__(self, layersSize, learningRate=0.1, beta=1.0):
+        self.learningRate = learningRate
         self.beta = beta
 
         self.nbInputs = layersSize[0]
@@ -34,9 +35,7 @@ class NeuralNetwork():
     
     def initializeNeuralNetwork(self):
         self.layers = []
-        print(self.nbLayers)
         for i in range(self.nbLayers):
-            print("--> ", i)
             nbInputs = (self.layersSize[i-1] if (i) else self.nbInputs) + 1 #to BIAS
             nbNodes = self.layersSize[i]
             layer = LayerNeuralNetwork(nbInputs, nbNodes, initializeRandom=True)
@@ -75,6 +74,30 @@ class NeuralNetwork():
     def getAns(self, idx):
         return self.layers[-1].outputY[idx]
 
+    def saveStateOnAFile(self, filePathName):
+        with open(filePathName, "w") as file:
+            #hiperparameters
+            file.write("{} {}\n".format(self.learningRate, self.beta))
+            file.write("{} {}\n".format(self.nbInputs, self.nbOutputs))
+            file.write("{}\n".format(self.nbLayers))
+            for layerIdx in range(self.nbLayers):
+                if (layerIdx):
+                    file.write(" ")
+                file.write("{}".format(self.layersSize[layerIdx]))
+            file.write("\n")
+            #Layers
+            for layerIdx in range(self.nbLayers):
+                #parameters
+                file.write("{} {} {}\n".format(self.layers[layerIdx].nbInputs, self.layers[layerIdx].nbNodes, self.layers[layerIdx].nbOutputs))
+                #weights
+                for i in range(self.layers[layerIdx].nbNodes):
+                    for j in range(self.layers[layerIdx].nbInputs):
+                        if (j):
+                            file.write(" ")
+                        file.write("{}".format(self.layers[layerIdx].weights.matrix[i][j]))
+                    file.write("\n")
+
+
 if (__name__ == '__main__'):
     nn = NeuralNetwork([2, 3, 2, 1])
     print(nn.nbLayers)
@@ -83,3 +106,5 @@ if (__name__ == '__main__'):
     nn.forward()
     for i in range(0, nn.nbLayers):
         print(nn.layers[i].outputY)
+
+    nn.saveStateOnAFile("./RNN-MLP/test.txt")
