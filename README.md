@@ -30,7 +30,7 @@
     - [x] Construir arquitetura da RNN (MLP);
     - [x] Implementar Forward;
     - [x] Carregar dataset de um arquivo;
-    - [ ] Implementar Loss Function (Root mean square error);
+    - [x] Implementar Loss Function (Root mean square error);
     - [ ] Implementar Back-Propagation (off-line);
     - [ ] Implementar Back-Propagation (on-line);
     - [x] Salvar estado da RNN (MLP) em um arquivo;

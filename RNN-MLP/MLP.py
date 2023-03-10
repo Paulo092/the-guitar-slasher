@@ -85,7 +85,7 @@ class NeuralNetwork():
     def getAns(self, idx):
         return self.layers[-1].outputY[idx]
 
-    def loadDatasetFromAFile(self,filePathName):
+    def loadDatasetFromAFile(self, filePathName):
         with open(filePathName, "r") as file:
             def getFileLine(useFloat=False):
                 return [float(value) if (useFloat) else int(value) for value in file.readline().split()]
@@ -101,6 +101,24 @@ class NeuralNetwork():
                 self.dataset[i].append(getFileLine(useFloat=True))
             
         self.loadedDataset = True
+
+    def quadraticErrorOfASample(self, sampleIdx):
+        if (not self.loadedDataset):
+            raise Exception("NeuralNetwork: quadraticErrorOfASample -> Dataset não carregado.")
+        self.insertInputs(self.dataset[sampleIdx][0])
+        self.forward()
+        quadraticError = 0
+        for i in range(self.nbOutputs):
+            quadraticError += (self.dataset[sampleIdx][1][i] - self.getAns(i)) * (self.dataset[sampleIdx][1][i] - self.getAns(i))
+        return quadraticError / 2.0
+
+    def rootMeanSquareError(self):
+        if (not self.loadedDataset):
+            raise Exception("NeuralNetwork: rootMeanSquareError -> Dataset não carregado.")
+        meanSquareError = 0
+        for i in range(self.nbSamples):
+            meanSquareError += self.quadraticErrorOfASample(i)
+        return meanSquareError / self.nbSamples
 
     def saveStateOnAFile(self, filePathName):
         with open(filePathName, "w") as file:
@@ -146,6 +164,5 @@ class NeuralNetwork():
 if (__name__ == '__main__'):
     nn = NeuralNetwork([2, 2, 1])
     nn.loadDatasetFromAFile("./RNN-MLP/Tests-Datasets/xor-problem-dataset.txt")
-    for i in range(nn.nbSamples):
-        print(nn.dataset[i][0])
-        print(nn.dataset[i][1])
+    print(nn.rootMeanSquareError())
+    print(nn.quadraticErrorOfASample(0))
