@@ -103,7 +103,7 @@ class NeuralNetwork():
                         file.write("{}".format(self.layers[layerIdx].weights.matrix[i][j]))
                     file.write("\n")
 
-    def loadStateOnAFile(self, filePathName):
+    def loadStateFromAFile(self, filePathName):
         with open(filePathName, "r") as file:
             def getFileLine(useFloat=False):
                 return [float(value) if (useFloat) else int(value) for value in file.readline().split()]
@@ -123,7 +123,7 @@ class NeuralNetwork():
 
 if (__name__ == '__main__'):
     nn = NeuralNetwork([])
-    nn.loadStateOnAFile("./RNN-MLP/test.txt")
+    nn.loadStateFromAFile("./RNN-MLP/test.txt")
     print(nn.nbLayers)
     print(nn.layersSize)
     for i in range(nn.nbLayers):

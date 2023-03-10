@@ -29,7 +29,10 @@
     - [x] Desenvolver TAD Matriz com operações básicas;
     - [x] Construir arquitetura da RNN (MLP);
     - [x] Implementar Forward;
-    - [ ] Implementar Back-Propagation;
+    - [ ] Carregar dataset de um arquivo;
+    - [ ] Implementar Loss Function (Root mean square error);
+    - [ ] Implementar Back-Propagation (off-line);
+    - [ ] Implementar Back-Propagation (on-line);
     - [x] Salvar estado da RNN (MLP) em um arquivo;
     - [x] Carregar estado da RNN (MLP) a partir de um arquivo.
 - [ ] Integrar com algorítmo genético;
