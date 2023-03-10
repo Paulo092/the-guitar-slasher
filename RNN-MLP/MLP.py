@@ -30,6 +30,11 @@ class NeuralNetwork():
         self.layersSize = None
         self.nbLayers = None
         self.layers = None
+        
+        self.nbSamples = None
+        self.dataset = None
+        self.loadedDataset = False
+
         if (len(layersSize) == 0):
             return
 
@@ -80,6 +85,23 @@ class NeuralNetwork():
     def getAns(self, idx):
         return self.layers[-1].outputY[idx]
 
+    def loadDatasetFromAFile(self,filePathName):
+        with open(filePathName, "r") as file:
+            def getFileLine(useFloat=False):
+                return [float(value) if (useFloat) else int(value) for value in file.readline().split()]
+            
+            nbInputs, nbOutputs = getFileLine()
+            if (nbInputs != self.nbInputs or nbOutputs != self.nbOutputs):
+                raise Exception("Neural Network: loadedDatasetFromAFile -> nbInputs != self.nbInputs or nbOutputs != self.nbOutputs.")
+            
+            self.nbSamples, = getFileLine()
+            self.dataset = [[] for _ in range(self.nbSamples)]
+            for i in range(self.nbSamples):
+                self.dataset[i].append(getFileLine(useFloat=True))
+                self.dataset[i].append(getFileLine(useFloat=True))
+            
+        self.loadedDataset = True
+
     def saveStateOnAFile(self, filePathName):
         with open(filePathName, "w") as file:
             #hiperparameters
@@ -122,9 +144,8 @@ class NeuralNetwork():
 
 
 if (__name__ == '__main__'):
-    nn = NeuralNetwork([])
-    nn.loadStateFromAFile("./RNN-MLP/test.txt")
-    print(nn.nbLayers)
-    print(nn.layersSize)
-    for i in range(nn.nbLayers):
-        print(nn.layers[i].weights)
+    nn = NeuralNetwork([2, 2, 1])
+    nn.loadDatasetFromAFile("./RNN-MLP/Tests-Datasets/xor-problem-dataset.txt")
+    for i in range(nn.nbSamples):
+        print(nn.dataset[i][0])
+        print(nn.dataset[i][1])

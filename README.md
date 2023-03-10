@@ -29,7 +29,7 @@
     - [x] Desenvolver TAD Matriz com operações básicas;
     - [x] Construir arquitetura da RNN (MLP);
     - [x] Implementar Forward;
-    - [ ] Carregar dataset de um arquivo;
+    - [x] Carregar dataset de um arquivo;
     - [ ] Implementar Loss Function (Root mean square error);
     - [ ] Implementar Back-Propagation (off-line);
     - [ ] Implementar Back-Propagation (on-line);
