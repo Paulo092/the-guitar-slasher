@@ -14,25 +14,25 @@
     Conjunto de algoritmos que constituem um mini jogo baseado na série guitar-hero e uma IA com o sonho de ser a maior guitarrista do mundo, utilizando o mínimo de bibliotecas possível.
 </p>
 
-## 📝 To-Do
+## 📝 To-Do List
 
-<h3>🎮 Game</h3>
-<input type="checkbox" disabled> Idealizar e desenvolver lógica do jogo de forma assincrona à interface; <br>
-<input type="checkbox" disabled> Escolher música; <br>
-<input type="checkbox" disabled> Sistema de notas e sincronização; <br>
-<input type="checkbox" disabled> Desenvolver a Interface; <br>
-<input type="checkbox" disabled style="margin-left: 25px"> Desenhar componentes do jogo; <br>
-<input type="checkbox" disabled> Integrar o backend assícrono à interface. <br>
+### 🎮 Game
+- [ ] Idealizar e desenvolver lógica do jogo de forma assincrona à interface;
+- [ ]  Escolher música;
+- [ ]  Sistema de notas e sincronização;
+- [ ]  Desenvolver a Interface;
+    - [ ]  Desenhar componentes do jogo;
+- [ ]  Integrar o backend assícrono à interface.
 
-<h3>🧠 IA</h3>
-<input type="checkbox" disabled> Desenvolver estrutura da rede neural; <br>
-<input type="checkbox" disabled style="margin-left: 25px"> Forward; <br>
-<input type="checkbox" disabled style="margin-left: 25px"> Back Propagation. <br>
-<input type="checkbox" disabled> Integrar com algorítmo genético; <br>
-<input type="checkbox" disabled> Integrar com aprendizado supervisionado; <br>
-<input type="checkbox" disabled> Integrar com aprendizado por reforço; <br>
-<input type="checkbox" disabled style="margin-left: 25px"> Discretizar universo + Q-Learning; <br>
-<input type="checkbox" disabled style="margin-left: 25px"> Aproximador de função + Q-Learning; <br>
+### 🧠 IA
+- [ ] Desenvolver estrutura da rede neural;
+    - [ ] Forward;
+    - [ ] Back Propagation.
+- [ ] Integrar com algorítmo genético;
+- [ ] Integrar com aprendizado supervisionado;
+- [ ] Integrar com aprendizado por reforço;
+    - [ ] Discretizar universo + Q-Learning;
+    - [ ] Aproximador de função + Q-Learning;
 
 ## Conceitos Usados
 - Computação Gráfica
