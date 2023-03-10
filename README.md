@@ -25,9 +25,13 @@
 - [ ]  Integrar o backend assícrono à interface.
 
 ### 🧠 IA
-- [ ] Desenvolver estrutura da rede neural;
-    - [ ] Forward;
-    - [ ] Back Propagation.
+- [ ] Desenvolver RNN (MLP);
+    - [ ] Desenvolver TAD Matriz com operações básicas;
+    - [ ] Construir arquitetura da RNN (MLP);
+    - [ ] Implementar Forward;
+    - [ ] Implementar Back-Propagation;
+    - [ ] Salvar estado da RNN (MLP) em um arquivo;
+    - [ ] Carregar estado da RNN (MLP) a partir de um arquivo.
 - [ ] Integrar com algorítmo genético;
 - [ ] Integrar com aprendizado supervisionado;
 - [ ] Integrar com aprendizado por reforço;
