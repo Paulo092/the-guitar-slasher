@@ -43,6 +43,7 @@ class Matrix:
             for j in range(otherMatrix.getNbCols()):
                 for k in range(self.nbCols):
                     ans.matrix[i][j] += self.matrix[i][k] * otherMatrix.matrix[k][j]
+                    #ans.matrix[i][j] += self.matrix[i][k] * (1 if (otherMatrix.matrix[k][j] >= 0) else -1)
         return ans
 
     def __str__(self):

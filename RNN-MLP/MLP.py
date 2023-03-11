@@ -1,4 +1,4 @@
-from math import exp as mathEulerExp
+from math import exp as mathEulerExp, tanh
 
 from Matrix import Matrix
 
@@ -11,6 +11,7 @@ class LayerNeuralNetwork():
         self.weights = None
         self.outputI = None
         self.outputY = None
+        self.delta = None
         self.initializeLayer(initializeRandom)
 
     def initializeLayer(self, initializeRandom):
@@ -18,18 +19,22 @@ class LayerNeuralNetwork():
         self.weights = Matrix(self.nbNodes, self.nbInputs, initializeRandom=True)
         self.outputI = Matrix(self.nbNodes, 1)
         self.outputY = Matrix(self.nbOutputs, 1)
+        self.delta = Matrix(self.nbNodes, 1)
 
 #MultiLayerPerceptron implementation
 #BIAS will be always the last one
 class NeuralNetwork():
-    def __init__(self, layersSize, learningRate=0.1, beta=1.0):
+    def __init__(self, layersSize, learningRate=0.01, precision=0.0000001, beta=1.0, maxEpochs=15000):
         self.learningRate = learningRate
+        self.precision = precision
         self.beta = beta
+        self.maxEpochs = maxEpochs
         self.nbInputs = None
         self.nbOutputs = None
         self.layersSize = None
         self.nbLayers = None
         self.layers = None
+        self.epochs = 0
         
         self.nbSamples = None
         self.dataset = None
@@ -63,11 +68,20 @@ class NeuralNetwork():
         return 1.0 / (1.0 + mathEulerExp(-1.0 * self.beta * value))
 
     def hyperbolicTangent(self, value):
+        #return (mathEulerExp(value)-mathEulerExp(-value))/(mathEulerExp(value)+mathEulerExp(-value))
         expValue = mathEulerExp(-1.0 * self.beta * value)
         return (1.0 - expValue) / (1.0 + expValue)
 
+    def derivatedHyperbolicTangent(self, value):
+        #return 1-self.hyperbolicTangent(value)**2
+        expValue = mathEulerExp(self.beta * value)
+        return (2.0 * self.beta * expValue) / ((expValue + 1.0) * (expValue + 1.0))
+
     def activationFunction(self, value):
         return self.hyperbolicTangent(value)
+    
+    def derivatedActivationFunction(self, value):
+        return self.derivatedHyperbolicTangent(value)
 
     def computeOutputI(self, layerIdx):
         self.layers[layerIdx].outputI = self.layers[layerIdx].weights * self.layers[layerIdx].input
@@ -120,6 +134,39 @@ class NeuralNetwork():
             meanSquareError += self.quadraticErrorOfASample(i)
         return meanSquareError / self.nbSamples
 
+    def train(self):
+        if (not self.loadedDataset):
+            raise Exception("NeuralNetwork: rootMeanSquareError -> Dataset não carregado.")
+        
+        while self.epochs < self.maxEpochs:
+            meanSquareErrorBefore = self.rootMeanSquareError()
+            print("Epoch {}".format(self.epochs))
+            self.trainEpoch()
+            meanSquareErrorAfter = self.rootMeanSquareError()
+            if (abs(meanSquareErrorAfter - meanSquareErrorBefore) <= self.precision):
+                break
+
+    def trainEpoch(self):
+        for sampleIdx in range(self.nbSamples):
+            self.insertInputs(self.dataset[sampleIdx][0])
+            self.forward()
+            for layerIdx in range(self.nbLayers-1, -1, -1):
+                for j in range(self.layers[layerIdx].nbNodes):
+                    if (layerIdx+1 != self.nbLayers): #is not the last layer
+                        firstTerm = 0
+                        for k in range(self.layers[layerIdx+1].nbNodes):
+                            firstTerm += self.layers[layerIdx+1].delta[k] * self.layers[layerIdx+1].weights.matrix[k][j]
+                        firstTerm *= -1.0
+                    else:
+                        firstTerm = self.dataset[sampleIdx][1][j] - self.getAns(j)
+                    self.layers[layerIdx].delta[j] = firstTerm * self.derivatedActivationFunction(self.layers[layerIdx].outputI[j])
+
+                for j in range(self.layers[layerIdx].nbNodes):
+                    for i in range(self.layers[layerIdx].nbInputs):
+                        #print(self.layers[layerIdx].delta.matrix)
+                        self.layers[layerIdx].weights.matrix[j][i] += self.learningRate * self.layers[layerIdx].delta[j] * self.layers[layerIdx].input[i]
+        self.epochs += 1
+
     def saveStateOnAFile(self, filePathName):
         with open(filePathName, "w") as file:
             #hiperparameters
@@ -165,4 +212,13 @@ if (__name__ == '__main__'):
     nn = NeuralNetwork([2, 2, 1])
     nn.loadDatasetFromAFile("./RNN-MLP/Tests-Datasets/xor-problem-dataset.txt")
     print(nn.rootMeanSquareError())
-    print(nn.quadraticErrorOfASample(0))
+    for layerIdx in range(nn.nbLayers):
+        print(nn.layers[layerIdx].nbOutputs)
+    nn.train()
+    print(nn.rootMeanSquareError())
+
+    for i in range(nn.nbSamples):
+        nn.insertInputs(nn.dataset[i][0])
+        nn.forward()
+        print(nn.dataset[i][0])
+        print(nn.getAns(0))
